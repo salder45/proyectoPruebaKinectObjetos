@@ -45,9 +45,14 @@ public class CubeController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		Debug.Log("Update");
 		this.context.WaitOneUpdateAll (this.depth);
-		Debug.Log("Tamanio "+tracking.Count);
-		
+		List<int> keys = new List<int>(tracking.Keys);
+		foreach(int key in keys){
+			//Debug.Log(key);
+			List<Point3D> l=tracking[key];
+			Debug.Log("X "+l[l.Count-1].X+" Y "+l[l.Count-1].Y+" Z "+l[l.Count-1].Z);
+		}
 	}
 	
 	void OnApplicationQuit(){
@@ -65,15 +70,15 @@ public class CubeController : MonoBehaviour {
 	}
 	
 	void hands_HandCreate(object sender, HandCreateEventArgs e){
-		Debug.Log("Create");
-		List<Point3D> lista=new List<Point3D>();
+		//Debug.Log("Create");
+		List<Point3D> lista=new List<Point3D>(trackingSize);
 		lista.Add(e.Position);
 		tracking.Add(e.UserID,lista);
 		
 	}
 	
 	void hands_HandUpdate(object sender, HandUpdateEventArgs e){
-		Debug.Log("Update");
+		//Debug.Log("Update");
 		List<Point3D> lista=tracking[e.UserID];
 		lista.Add(e.Position);
 		if(lista.Count>trackingSize){
@@ -82,7 +87,7 @@ public class CubeController : MonoBehaviour {
 	}
 	
 	void hands_HandDestroy(object sender,HandDestroyEventArgs e){
-		Debug.Log("Destroy");
+		//Debug.Log("Destroy");
 		tracking.Remove(e.UserID);
 	}
 	//Handlers-END
