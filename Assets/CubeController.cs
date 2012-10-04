@@ -46,13 +46,18 @@ public class CubeController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Debug.Log("Update");
+		
+		
 		this.context.WaitOneUpdateAll (this.depth);
+		calcular();
+		/*
 		List<int> keys = new List<int>(tracking.Keys);
 		foreach(int key in keys){
 			//Debug.Log(key);
 			List<Point3D> l=tracking[key];
 			Debug.Log("X "+l[l.Count-1].X+" Y "+l[l.Count-1].Y+" Z "+l[l.Count-1].Z);
 		}
+		*/
 	}
 	
 	void OnApplicationQuit(){
@@ -89,6 +94,19 @@ public class CubeController : MonoBehaviour {
 	void hands_HandDestroy(object sender,HandDestroyEventArgs e){
 		//Debug.Log("Destroy");
 		tracking.Remove(e.UserID);
+	}
+	
+	void calcular(){
+		List<int> keys = new List<int>(tracking.Keys);
+		if(keys.Count==2){
+			
+			
+			foreach(int key in keys){
+				
+			}			
+		}else{
+			Debug.Log("No se puede mover");
+		}
 	}
 	//Handlers-END
 }
