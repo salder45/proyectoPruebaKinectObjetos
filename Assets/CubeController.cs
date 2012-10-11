@@ -13,6 +13,9 @@ public class CubeController : MonoBehaviour {
 	
 	private Point3D puntoTorso;
 	
+	private const float MARGEN_CUADRO_CENTRAL=50;
+	private const float RADIO_CUADRO_CENTRAL=200;
+	private const float RADIO_CUADRO_MOVIL=100;
 	
 	
 	//User Tracking
@@ -65,11 +68,25 @@ public class CubeController : MonoBehaviour {
 				if(this.skeletonCapability.IsTracking(user)){
 				updatePuntoRef(skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.Torso));
 				Point3D handIz,handDr;
-				SkeletonJointPosition sjpHandIz=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.LeftHand);
-				SkeletonJointPosition sjpHandDr=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.RightHand);
+				SkeletonJointPosition sjpHandIz=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.RightHand);
+				SkeletonJointPosition sjpHandDr=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.LeftHand);
+				
 				if(isDentroDelCuadro(sjpHandDr.Position)&&isDentroDelCuadro(sjpHandIz.Position)){
-					Debug.Log("Dentro del cuadro");
+					//Debug.Log("Dentro del cuadro");
+					/*
+					if(sjpHandDr.Position.Z<sjpHandIz.Position.Z){
+						transform.Rotate(new Vector3(0,-valorRotation,0));
+					}else if(sjpHandIz.Position.Z<sjpHandDr.Position.Z){
+						transform.Rotate(new Vector3(0,valorRotation,0));
+					}
+					*/
+					if(sjpHandDr.Position.Y>sjpHandIz.Position.Y){
+						transform.Rotate(new Vector3(valorRotation,0,0));
+					}else if(sjpHandIz.Position.Y>sjpHandDr.Position.Y){
+						transform.Rotate(new Vector3(-valorRotation,0,0));
+					}
 				}
+				
 			}
 		}
 	}
@@ -127,6 +144,24 @@ public class CubeController : MonoBehaviour {
 		return dentro;
 	}
 	
+	bool isDentro(Point3D puntoAChecar, Point3D puntoCentral, float cantidad, bool isCentral){
+		float xCentral=puntoCentral.X;
+		float yCentral=puntoCentral.Y;
+		float zCentral=puntoCentral.Z;
+		bool ret=false;
+		if(isCentral){
+			if((puntoAChecar.X<xCentral+cantidad&&puntoAChecar.X>xCentral-cantidad)&&(puntoAChecar.Y<yCentral+cantidad&&puntoAChecar.Y>yCentral-cantidad)&&(puntoAChecar.Z>zCentral-((cantidad*2)+MARGEN_CUADRO_CENTRAL)&&(puntoAChecar.Z<zCentral-(MARGEN_CUADRO_CENTRAL)))){
+				ret=true;
+			}
+		}else{
+			if((puntoAChecar.X<xCentral+cantidad&&puntoAChecar.X>xCentral-cantidad)&&(puntoAChecar.Y<yCentral+cantidad&&puntoAChecar.Y>yCentral-cantidad)&&(puntoAChecar.Z>zCentral-cantidad&&puntoAChecar.Z<zCentral+cantidad)){
+				ret=true;
+			}
+		}
+		
+		return ret;
+	}
+	
 	bool isManoDr(Point3D mano){
 		bool der=false;
 		if(mano.X<puntoTorso.X){
@@ -134,4 +169,5 @@ public class CubeController : MonoBehaviour {
 		}		
 		return der;
 	}
+
 }
