@@ -14,7 +14,7 @@ public class CubeController : MonoBehaviour {
 	private Point3D puntoTorso;
 	
 	private const float MARGEN_CUADRO_CENTRAL=50;
-	private const float RADIO_CUADRO_CENTRAL=200;
+	private const float RADIO_CUADRO_CENTRAL=300;
 	private const float RADIO_CUADRO_MOVIL=100;
 	
 	
@@ -71,21 +71,46 @@ public class CubeController : MonoBehaviour {
 				SkeletonJointPosition sjpHandIz=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.RightHand);
 				SkeletonJointPosition sjpHandDr=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.LeftHand);
 				
-				if(isDentroDelCuadro(sjpHandDr.Position)&&isDentroDelCuadro(sjpHandIz.Position)){
-					//Debug.Log("Dentro del cuadro");
+				if(isDentro(sjpHandDr.Position,this.puntoTorso,RADIO_CUADRO_CENTRAL,true)&&isDentro(sjpHandIz.Position,this.puntoTorso,RADIO_CUADRO_CENTRAL,true)){
+					Debug.Log("Esta Dentro");
+					
+					float rotacionX=0;
+					float rotacionY=0;
+					float rotacionZ=0;
+				
+					if(sjpHandDr.Position.Z<sjpHandIz.Position.Z){
+						rotacionY=-valorRotation;
+					}else{
+						rotacionY=valorRotation;
+					}
 					/*
+					if(sjpHandDr.Position.Y>sjpHandIz.Position.Y){
+						rotacionX=valorRotation;
+					}else{
+						rotacionX=-valorRotation;
+					}
+					*/
+					transform.Rotate(new Vector3(rotacionX,rotacionY,rotacionZ));
+					
+				}
+				
+				
+				
+				/*
+				//Debug.Log("Dentro del cuadro");
+					
 					if(sjpHandDr.Position.Z<sjpHandIz.Position.Z){
 						transform.Rotate(new Vector3(0,-valorRotation,0));
 					}else if(sjpHandIz.Position.Z<sjpHandDr.Position.Z){
 						transform.Rotate(new Vector3(0,valorRotation,0));
 					}
-					*/
+					
 					if(sjpHandDr.Position.Y>sjpHandIz.Position.Y){
 						transform.Rotate(new Vector3(valorRotation,0,0));
 					}else if(sjpHandIz.Position.Y>sjpHandDr.Position.Y){
 						transform.Rotate(new Vector3(-valorRotation,0,0));
 					}
-				}
+				*/
 				
 			}
 		}
@@ -133,17 +158,6 @@ public class CubeController : MonoBehaviour {
 	}
 	
 	
-	bool isDentroDelCuadro(Point3D punto){
-		float xCentro=puntoTorso.X;
-		float yCentro=puntoTorso.Y;
-		float zCentro=puntoTorso.Z;
-		bool dentro=false;
-		if((punto.X<xCentro+200f&&punto.X>xCentro-200f)&&(punto.Y<yCentro+200f&&punto.Y>yCentro-200f)&&(punto.Z>zCentro-450f&&punto.Z<zCentro-50f)){
-			dentro=true;
-		}		
-		return dentro;
-	}
-	
 	bool isDentro(Point3D puntoAChecar, Point3D puntoCentral, float cantidad, bool isCentral){
 		float xCentral=puntoCentral.X;
 		float yCentral=puntoCentral.Y;
@@ -161,13 +175,4 @@ public class CubeController : MonoBehaviour {
 		
 		return ret;
 	}
-	
-	bool isManoDr(Point3D mano){
-		bool der=false;
-		if(mano.X<puntoTorso.X){
-			der=true;
-		}		
-		return der;
-	}
-
 }
