@@ -14,7 +14,7 @@ public class CubeController : MonoBehaviour {
 	private Point3D puntoTorso;
 	
 	private const float MARGEN_CUADRO_CENTRAL=50;
-	private const float RADIO_CUADRO_CENTRAL=300;
+	private const float RADIO_CUADRO_CENTRAL=350;
 	private const float RADIO_CUADRO_MOVIL=100;
 	
 	
@@ -77,41 +77,22 @@ public class CubeController : MonoBehaviour {
 					float rotacionX=0;
 					float rotacionY=0;
 					float rotacionZ=0;
-				
+					/*
 					if(sjpHandDr.Position.Z<sjpHandIz.Position.Z){
 						rotacionY=-valorRotation;
 					}else{
 						rotacionY=valorRotation;
-					}
-					/*
+					}*/
+					
 					if(sjpHandDr.Position.Y>sjpHandIz.Position.Y){
 						rotacionX=valorRotation;
 					}else{
 						rotacionX=-valorRotation;
 					}
-					*/
+					
 					transform.Rotate(new Vector3(rotacionX,rotacionY,rotacionZ));
 					
-				}
-				
-				
-				
-				/*
-				//Debug.Log("Dentro del cuadro");
-					
-					if(sjpHandDr.Position.Z<sjpHandIz.Position.Z){
-						transform.Rotate(new Vector3(0,-valorRotation,0));
-					}else if(sjpHandIz.Position.Z<sjpHandDr.Position.Z){
-						transform.Rotate(new Vector3(0,valorRotation,0));
-					}
-					
-					if(sjpHandDr.Position.Y>sjpHandIz.Position.Y){
-						transform.Rotate(new Vector3(valorRotation,0,0));
-					}else if(sjpHandIz.Position.Y>sjpHandDr.Position.Y){
-						transform.Rotate(new Vector3(-valorRotation,0,0));
-					}
-				*/
-				
+				}				
 			}
 		}
 	}
