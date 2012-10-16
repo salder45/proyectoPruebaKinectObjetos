@@ -13,9 +13,9 @@ public class CubeController : MonoBehaviour {
 	
 	private Point3D puntoTorso;
 	
-	private const float MARGEN_CUADRO_CENTRAL=50;
-	private const float RADIO_CUADRO_CENTRAL=350;
-	private const float RADIO_CUADRO_MOVIL=100;
+	private const float MEDIDA_SEGURIDAD_FRENTE_Z=50;
+	private const float MEDIDA_SEGURIDAD_CENTRAL=250;
+	private const float MEDIDA_SEGURIDAD_MANOS=100;
 	
 	
 	//User Tracking
@@ -27,12 +27,7 @@ public class CubeController : MonoBehaviour {
 	private Dictionary <int, Dictionary<SkeletonJoint,SkeletonJointPosition>> joints;
 	//
 	public float valorRotation=0.75f;
-	private int manoDr=0;
-	private int manoIz=0;
-	private Point3D DrRespaldo;
-	private Point3D IzRespaldo;
-	
-	
+		
 	void Start () {
 		Debug.Log("START APP");
 		this.context=Context.CreateFromXmlFile(XML_CONFIG, out scriptNode);
@@ -65,34 +60,19 @@ public class CubeController : MonoBehaviour {
 		this.context.WaitOneUpdateAll (this.depth);
 		int[] users=this.userGenerator.GetUsers();
 			foreach(int user in users){
-				if(this.skeletonCapability.IsTracking(user)){
+			
+			if(this.skeletonCapability.IsTracking(user)){
 				updatePuntoRef(skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.Torso));
-				Point3D handIz,handDr;
-				SkeletonJointPosition sjpHandIz=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.RightHand);
-				SkeletonJointPosition sjpHandDr=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.LeftHand);
-				
-				if(isDentro(sjpHandDr.Position,this.puntoTorso,RADIO_CUADRO_CENTRAL,true)&&isDentro(sjpHandIz.Position,this.puntoTorso,RADIO_CUADRO_CENTRAL,true)){
-					Debug.Log("Esta Dentro");
-					
-					float rotacionX=0;
-					float rotacionY=0;
-					float rotacionZ=0;
-					/*
-					if(sjpHandDr.Position.Z<sjpHandIz.Position.Z){
-						rotacionY=-valorRotation;
-					}else{
-						rotacionY=valorRotation;
-					}*/
-					
-					if(sjpHandDr.Position.Y>sjpHandIz.Position.Y){
-						rotacionX=valorRotation;
-					}else{
-						rotacionX=-valorRotation;
+				SkeletonJointPosition posHandIz=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.RightHand);
+				SkeletonJointPosition posHandDr=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.LeftHand);
+				if(isDentroCuadroSeguridad(posHandDr.Position)&&isDentroCuadroSeguridad(posHandIz.Position)){
+					if(posHandDr.Position.Z<posHandIz.Position.Z&&!isDentroMargenZ(posHandDr.Position.Z,posHandIz.Position.Z)){
+						transform.Rotate(new Vector3(0,-valorRotation,0));
+					}else if(posHandDr.Position.Z>posHandIz.Position.Z&&!isDentroMargenZ(posHandDr.Position.Z,posHandIz.Position.Z)){
+						transform.Rotate(new Vector3(0,valorRotation,0));
 					}
-					
-					transform.Rotate(new Vector3(rotacionX,rotacionY,rotacionZ));
-					
-				}				
+				}
+				
 			}
 		}
 	}
@@ -138,22 +118,43 @@ public class CubeController : MonoBehaviour {
 		this.puntoTorso=punto.Position;
 	}
 	
-	
-	bool isDentro(Point3D puntoAChecar, Point3D puntoCentral, float cantidad, bool isCentral){
-		float xCentral=puntoCentral.X;
-		float yCentral=puntoCentral.Y;
-		float zCentral=puntoCentral.Z;
-		bool ret=false;
-		if(isCentral){
-			if((puntoAChecar.X<xCentral+cantidad&&puntoAChecar.X>xCentral-cantidad)&&(puntoAChecar.Y<yCentral+cantidad&&puntoAChecar.Y>yCentral-cantidad)&&(puntoAChecar.Z>zCentral-((cantidad*2)+MARGEN_CUADRO_CENTRAL)&&(puntoAChecar.Z<zCentral-(MARGEN_CUADRO_CENTRAL)))){
-				ret=true;
-			}
-		}else{
-			if((puntoAChecar.X<xCentral+cantidad&&puntoAChecar.X>xCentral-cantidad)&&(puntoAChecar.Y<yCentral+cantidad&&puntoAChecar.Y>yCentral-cantidad)&&(puntoAChecar.Z>zCentral-cantidad&&puntoAChecar.Z<zCentral+cantidad)){
-				ret=true;
-			}
-		}
+	bool isDentroCuadroSeguridad(Point3D puntoMano){
+		bool retorno=false;
+		float x,y,z;
+		x=puntoTorso.X;
+		y=puntoTorso.Y;
+		z=puntoTorso.Z;
 		
-		return ret;
+		if((x+MEDIDA_SEGURIDAD_CENTRAL>puntoMano.X&&x-MEDIDA_SEGURIDAD_CENTRAL<puntoMano.X)&&
+			(y+MEDIDA_SEGURIDAD_CENTRAL>puntoMano.Y&&y-MEDIDA_SEGURIDAD_CENTRAL<puntoMano.Y)&&
+			(z-((2*MEDIDA_SEGURIDAD_CENTRAL)+MEDIDA_SEGURIDAD_FRENTE_Z)<puntoMano.Z&&z-MEDIDA_SEGURIDAD_FRENTE_Z>puntoMano.Z)){
+			retorno=true;
+		}	
+		
+		return retorno;
+	}
+	
+	bool isDentroMargenX(float xManoDr, float xManoIz){
+		bool retorno=false;
+		if(xManoDr+MEDIDA_SEGURIDAD_MANOS>=xManoIz&&xManoDr-MEDIDA_SEGURIDAD_MANOS<=xManoIz){
+			retorno=true;
+		}
+		return retorno;
+	}
+	
+	bool isDentroMargenY(float yManoDr, float yManoIz){
+		bool retorno=false;
+		if(yManoDr+MEDIDA_SEGURIDAD_MANOS>=yManoIz&&yManoDr-MEDIDA_SEGURIDAD_MANOS<=yManoIz){
+			retorno=true;
+		}
+		return retorno;
+	}
+	
+	bool isDentroMargenZ(float zManoDr, float zManoIz){
+		bool retorno=false;
+		if(zManoDr+MEDIDA_SEGURIDAD_MANOS>zManoIz&&zManoIz>zManoDr-MEDIDA_SEGURIDAD_MANOS){
+			retorno=true;
+		}
+		return retorno;
 	}
 }

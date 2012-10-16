@@ -1,6 +1,6 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/CubeController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../OpenNI/Samples/UserTracker.net/MainWindow.cs">
     <Files>
       <File FileName="../OpenNI/Samples/UserTracker.net/MainWindow.cs" Line="48" Column="31" />
       <File FileName="../tinkerer/UnityWrapper/Assets/Nite3.cs" Line="57" Column="20" />
@@ -8,7 +8,6 @@
       <File FileName="../tinkerer/UnityWrapper/Assets/Nite.cs" Line="1" Column="1" />
       <File FileName="../tinkerer/UnityWrapper/Assets/handgen.cs" Line="82" Column="19" />
       <File FileName="../prueba/Assets/PlayerController.cs" Line="126" Column="66" />
-      <File FileName="Assets/CubeController.cs" Line="99" Column="7" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
