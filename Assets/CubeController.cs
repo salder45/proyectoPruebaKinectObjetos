@@ -14,7 +14,7 @@ public class CubeController : MonoBehaviour {
 	private Point3D puntoTorso;
 	
 	private const float MEDIDA_SEGURIDAD_FRENTE_Z=50;
-	private const float MEDIDA_SEGURIDAD_CENTRAL=250;
+	private const float MEDIDA_SEGURIDAD_CENTRAL=350;
 	private const float MEDIDA_SEGURIDAD_MANOS=100;
 	
 	
@@ -65,13 +65,32 @@ public class CubeController : MonoBehaviour {
 				updatePuntoRef(skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.Torso));
 				SkeletonJointPosition posHandIz=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.RightHand);
 				SkeletonJointPosition posHandDr=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.LeftHand);
-				if(isDentroCuadroSeguridad(posHandDr.Position)&&isDentroCuadroSeguridad(posHandIz.Position)){
-					if(posHandDr.Position.Z<posHandIz.Position.Z&&!isDentroMargenZ(posHandDr.Position.Z,posHandIz.Position.Z)){
-						transform.Rotate(new Vector3(0,-valorRotation,0));
-					}else if(posHandDr.Position.Z>posHandIz.Position.Z&&!isDentroMargenZ(posHandDr.Position.Z,posHandIz.Position.Z)){
-						transform.Rotate(new Vector3(0,valorRotation,0));
+				
+				if(isDentroCuadroSeguridad(posHandDr.Position)&isDentroCuadroSeguridad(posHandIz.Position)){
+					float x,y,z;
+					x=y=z=0;
+									
+					if((posHandDr.Position.Z<posHandIz.Position.Z&isDentroMargenY(posHandDr.Position.Y,posHandIz.Position.Y))&(!isDentroMargenZ(posHandDr.Position.Z,posHandIz.Position.Z))){
+						y=-valorRotation;
+					}else if((posHandDr.Position.Z>posHandIz.Position.Z&isDentroMargenY(posHandDr.Position.Y,posHandIz.Position.Y))&(!isDentroMargenZ(posHandDr.Position.Z,posHandIz.Position.Z))){
+						y=valorRotation;
 					}
+					
+					if((posHandDr.Position.Y<posHandIz.Position.Y&isDentroMargenZ(posHandDr.Position.Z,posHandIz.Position.Z))&(!isDentroMargenY(posHandDr.Position.Y,posHandIz.Position.Y))){
+						x=-valorRotation;
+					}else if((posHandDr.Position.Y>posHandIz.Position.Y&isDentroMargenZ(posHandDr.Position.Z,posHandIz.Position.Z))&(!isDentroMargenY(posHandDr.Position.Y,posHandIz.Position.Y))){
+						x=valorRotation;
+					}
+					
+					
+
+					transform.Rotate(new Vector3(x,y,z));
 				}
+				
+				
+				//x
+				//positivo es hacia arriba
+				//negativo hacia abajo
 				
 			}
 		}
@@ -157,4 +176,5 @@ public class CubeController : MonoBehaviour {
 		}
 		return retorno;
 	}
+	
 }
