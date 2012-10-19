@@ -29,6 +29,7 @@ public class CubeController : MonoBehaviour {
 	public float valorRotation=0.75f;
 	private int tamanoList=2;
 	private List<float> distancias;
+	private float escala=0f;
 			
 	void Start () {
 		Debug.Log("START APP");
@@ -83,11 +84,13 @@ public class CubeController : MonoBehaviour {
 						
 						if(ultimo>primero){
 							Debug.Log("Aumentar");
-							transform.localScale=new Vector3(2,2,2);
+							escala=escala+0.1f;
 						}else if(ultimo<primero){
 							Debug.Log("Disminuir");
-							transform.localScale=new Vector3(0.5f,0.5f,0.5f);
+							escala=escala-0.1f;
 						}
+						
+						transform.localScale=new Vector3(escala,escala,escala);
 					}
 					
 					
