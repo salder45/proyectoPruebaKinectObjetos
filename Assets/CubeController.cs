@@ -27,7 +27,9 @@ public class CubeController : MonoBehaviour {
 	private Dictionary <int, Dictionary<SkeletonJoint,SkeletonJointPosition>> joints;
 	//
 	public float valorRotation=0.75f;
-		
+	private int tamanoList=2;
+	private List<float> distancias;
+			
 	void Start () {
 		Debug.Log("START APP");
 		this.context=Context.CreateFromXmlFile(XML_CONFIG, out scriptNode);
@@ -50,6 +52,7 @@ public class CubeController : MonoBehaviour {
 		this.userGenerator.StartGenerating();
 		this.joints=new Dictionary<int,Dictionary<SkeletonJoint,SkeletonJointPosition>>();
 		//
+		distancias=new List<float>(tamanoList);
 	}
 
 	
@@ -67,9 +70,27 @@ public class CubeController : MonoBehaviour {
 				SkeletonJointPosition posHandDr=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.LeftHand);
 				
 				if(isDentroCuadroSeguridad(posHandDr.Position)&isDentroCuadroSeguridad(posHandIz.Position)){
+					distancias.Add(distanciaEntreDosPuntos(posHandIz.Position,posHandDr.Position));
+					if(distancias.Count>tamanoList){
+						distancias.RemoveAt(0);
+					}
+					
+					
+					
+					if(distancias.Count==2){
+						float ultimo=distancias[1];
+						float primero=distancias[0];
+						
+						if(ultimo>primero){
+							Debug.Log("Aumentar");
+						}else if(ultimo<primero){
+							Debug.Log("Disminuir");
+						}
+					}
+					
+					/*
 					float x,y,z;
-					x=y=z=0;
-									
+					x=y=z=0;									
 					if((posHandDr.Position.Z<posHandIz.Position.Z&isDentroMargenY(posHandDr.Position.Y,posHandIz.Position.Y))&(!isDentroMargenZ(posHandDr.Position.Z,posHandIz.Position.Z))){
 						y=-valorRotation;
 					}else if((posHandDr.Position.Z>posHandIz.Position.Z&isDentroMargenY(posHandDr.Position.Y,posHandIz.Position.Y))&(!isDentroMargenZ(posHandDr.Position.Z,posHandIz.Position.Z))){
@@ -81,10 +102,8 @@ public class CubeController : MonoBehaviour {
 					}else if((posHandDr.Position.Y>posHandIz.Position.Y&isDentroMargenZ(posHandDr.Position.Z,posHandIz.Position.Z))&(!isDentroMargenY(posHandDr.Position.Y,posHandIz.Position.Y))){
 						x=valorRotation;
 					}
-					
-					
-
 					transform.Rotate(new Vector3(x,y,z));
+					*/
 				}
 				
 				
@@ -177,4 +196,11 @@ public class CubeController : MonoBehaviour {
 		return retorno;
 	}
 	
+	float distanciaEntreDosPuntos(Point3D a,Point3D b){
+		return Mathf.Sqrt(elevaCuadrado(b.X-a.X)+elevaCuadrado(b.Y-a.Y)+elevaCuadrado(b.Z-a.Z));
+	}
+	
+	float elevaCuadrado(float numero){
+		return (float)Math.Pow(numero,2);
+	}
 }
