@@ -83,10 +83,13 @@ public class CubeController : MonoBehaviour {
 						
 						if(ultimo>primero){
 							Debug.Log("Aumentar");
+							transform.localScale=new Vector3(2,2,2);
 						}else if(ultimo<primero){
 							Debug.Log("Disminuir");
+							transform.localScale=new Vector3(0.5f,0.5f,0.5f);
 						}
 					}
+					
 					
 					/*
 					float x,y,z;
