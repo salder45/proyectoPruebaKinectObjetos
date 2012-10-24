@@ -28,9 +28,11 @@ public class CubeController : MonoBehaviour {
 	//
 	public float valorRotation=0.75f;
 	private int tamanoList=2;
-	private List<float> distancias;
 	private float escala=0f;
-			
+	private int sector=100;
+	private const float TAMANO_SECTOR=100;
+	//
+	private List<float> distancias;
 	void Start () {
 		Debug.Log("START APP");
 		this.context=Context.CreateFromXmlFile(XML_CONFIG, out scriptNode);
@@ -71,22 +73,22 @@ public class CubeController : MonoBehaviour {
 				SkeletonJointPosition posHandDr=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.LeftHand);
 				
 				if(isDentroCuadroSeguridad(posHandDr.Position)&isDentroCuadroSeguridad(posHandIz.Position)){
+					
 					distancias.Add(distanciaEntreDosPuntos(posHandIz.Position,posHandDr.Position));
 					if(distancias.Count>tamanoList){
 						distancias.RemoveAt(0);
 					}
-					
-					
+									
 					
 					if(distancias.Count==2){
 						float ultimo=distancias[1];
 						float primero=distancias[0];
 						
 						if(ultimo>primero){
-							Debug.Log("Aumentar");
+							Debug.Log("Aumentar U= "+ultimo+" P= "+primero);
 							escala=escala+0.1f;
 						}else if(ultimo<primero){
-							Debug.Log("Disminuir");
+							Debug.Log("Disminuir U= "+ultimo+" P= "+primero);
 							escala=escala-0.1f;
 						}
 						
