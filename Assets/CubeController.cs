@@ -31,6 +31,7 @@ public class CubeController : MonoBehaviour {
 	private float escala=0f;
 	private int sector=100;
 	private const float TAMANO_SECTOR=100;
+	private const int ESCALA_DISTANCIA=20;
 	//
 	private List<float> distancias;
 	void Start () {
@@ -73,7 +74,12 @@ public class CubeController : MonoBehaviour {
 				SkeletonJointPosition posHandDr=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.LeftHand);
 				
 				if(isDentroCuadroSeguridad(posHandDr.Position)&isDentroCuadroSeguridad(posHandIz.Position)){
+					float distanciaAct=(distanciaEntreDosPuntos(posHandDr.Position,posHandIz.Position)/10);
+					float escalaAct=((int)(distanciaAct)*1f)/ESCALA_DISTANCIA;
+					Debug.Log(escalaAct);
+					transform.localScale=new Vector3(escalaAct,escalaAct,escalaAct);
 					
+					/*
 					distancias.Add(distanciaEntreDosPuntos(posHandIz.Position,posHandDr.Position));
 					if(distancias.Count>tamanoList){
 						distancias.RemoveAt(0);
@@ -94,7 +100,7 @@ public class CubeController : MonoBehaviour {
 						
 						transform.localScale=new Vector3(escala,escala,escala);
 					}
-					
+					*/
 					
 					/*
 					float x,y,z;
@@ -205,7 +211,8 @@ public class CubeController : MonoBehaviour {
 	}
 	
 	float distanciaEntreDosPuntos(Point3D a,Point3D b){
-		return Mathf.Sqrt(elevaCuadrado(b.X-a.X)+elevaCuadrado(b.Y-a.Y)+elevaCuadrado(b.Z-a.Z));
+		//return Mathf.Sqrt(elevaCuadrado(b.X-a.X)+elevaCuadrado(b.Y-a.Y)+elevaCuadrado(b.Z-a.Z));
+		return Mathf.Sqrt(elevaCuadrado(b.X-a.X)+elevaCuadrado(b.Y-a.Y));
 	}
 	
 	float elevaCuadrado(float numero){
