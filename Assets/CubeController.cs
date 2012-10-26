@@ -30,6 +30,9 @@ public class CubeController : MonoBehaviour {
 	private const float TAMANO_SECTOR=100;
 	private const int ESCALA_DISTANCIA=2;
 	//
+	private int distanciaAnt=0;
+	private int escalaAnt=0;
+	
 	
 	void Start () {
 		Debug.Log("START APP");
@@ -70,13 +73,30 @@ public class CubeController : MonoBehaviour {
 				SkeletonJointPosition posHandDr=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.LeftHand);
 				
 				if(isDentroCuadroSeguridad(posHandDr.Position)&isDentroCuadroSeguridad(posHandIz.Position)){
+					
+					int distanciaAct=(int)(distanciaEntreDosPuntos(posHandDr.Position,posHandIz.Position)/100);
+					int escalaAct=(int)(distanciaAct/ESCALA_DISTANCIA);
+					if(escalaAnt !=escalaAct){
+						if(!((distanciaAnt+1)==distanciaAct)||!((distanciaAnt-1)==distanciaAct)){
+							transform.localScale=Vector3.Lerp(transform.localScale,new Vector3(escalaAct,escalaAct,escalaAct),10*Time.time);
+						}
+					}
+					Debug.Log(distanciaAct+" --- "+distanciaAnt);
+					distanciaAnt=distanciaAct;
+					escalaAnt=escalaAct;
+					/*
 					float distanciaAct=(distanciaEntreDosPuntos(posHandDr.Position,posHandIz.Position)/100);
 					Debug.Log((int)distanciaAct);
-					float escalaAct=((int)(distanciaAct)*1f)/ESCALA_DISTANCIA;
-					//Debug.Log(escalaAct);
+					float escalaAct=0;
+					if(Math.Abs(distanciaAct-distanciaAnt)>=1){
+						escalaAct=((int)(distanciaAct)*1f)/ESCALA_DISTANCIA;
+						// distanciaAnt=distanciaAct;
+						transform.localScale=Vector3.Lerp(transform.localScale,new Vector3(escalaAct,escalaAct,escalaAct),Time.time);
+					}
 					//transform.localScale=new Vector3(escalaAct,escalaAct,escalaAct);
-					transform.localScale=Vector3.Lerp(transform.localScale,new Vector3(escalaAct,escalaAct,escalaAct),Time.time);
 					
+					//transform.localScale=Vector3.Slerp(transform.localScale,new Vector3((float)escalaInt,(float)escalaInt,(float)escalaInt),Time.time);
+					*/
 					/*
 					float x,y,z;
 					x=y=z=0;									
