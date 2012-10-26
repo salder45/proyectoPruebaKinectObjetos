@@ -27,13 +27,10 @@ public class CubeController : MonoBehaviour {
 	private Dictionary <int, Dictionary<SkeletonJoint,SkeletonJointPosition>> joints;
 	//
 	public float valorRotation=0.75f;
-	private int tamanoList=2;
-	private float escala=0f;
-	private int sector=100;
 	private const float TAMANO_SECTOR=100;
-	private const int ESCALA_DISTANCIA=20;
+	private const int ESCALA_DISTANCIA=2;
 	//
-	private List<float> distancias;
+	
 	void Start () {
 		Debug.Log("START APP");
 		this.context=Context.CreateFromXmlFile(XML_CONFIG, out scriptNode);
@@ -56,7 +53,6 @@ public class CubeController : MonoBehaviour {
 		this.userGenerator.StartGenerating();
 		this.joints=new Dictionary<int,Dictionary<SkeletonJoint,SkeletonJointPosition>>();
 		//
-		distancias=new List<float>(tamanoList);
 	}
 
 	
@@ -74,33 +70,12 @@ public class CubeController : MonoBehaviour {
 				SkeletonJointPosition posHandDr=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.LeftHand);
 				
 				if(isDentroCuadroSeguridad(posHandDr.Position)&isDentroCuadroSeguridad(posHandIz.Position)){
-					float distanciaAct=(distanciaEntreDosPuntos(posHandDr.Position,posHandIz.Position)/10);
+					float distanciaAct=(distanciaEntreDosPuntos(posHandDr.Position,posHandIz.Position)/100);
+					Debug.Log((int)distanciaAct);
 					float escalaAct=((int)(distanciaAct)*1f)/ESCALA_DISTANCIA;
-					Debug.Log(escalaAct);
-					transform.localScale=new Vector3(escalaAct,escalaAct,escalaAct);
-					
-					/*
-					distancias.Add(distanciaEntreDosPuntos(posHandIz.Position,posHandDr.Position));
-					if(distancias.Count>tamanoList){
-						distancias.RemoveAt(0);
-					}
-									
-					
-					if(distancias.Count==2){
-						float ultimo=distancias[1];
-						float primero=distancias[0];
-						
-						if(ultimo>primero){
-							Debug.Log("Aumentar U= "+ultimo+" P= "+primero);
-							escala=escala+0.1f;
-						}else if(ultimo<primero){
-							Debug.Log("Disminuir U= "+ultimo+" P= "+primero);
-							escala=escala-0.1f;
-						}
-						
-						transform.localScale=new Vector3(escala,escala,escala);
-					}
-					*/
+					//Debug.Log(escalaAct);
+					//transform.localScale=new Vector3(escalaAct,escalaAct,escalaAct);
+					transform.localScale=Vector3.Lerp(transform.localScale,new Vector3(escalaAct,escalaAct,escalaAct),Time.time);
 					
 					/*
 					float x,y,z;
