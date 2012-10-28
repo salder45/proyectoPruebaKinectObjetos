@@ -78,16 +78,20 @@ public class CubeController : MonoBehaviour {
 					int escalaAct=(int)(distanciaAct/ESCALA_DISTANCIA);
 					Debug.Log(distanciaAct+" +++ "+distanciaAnt);
 					Debug.Log((distanciaAnt+1==distanciaAct)&&!(distanciaAnt-1==distanciaAct));
-					if(escalaAnt !=escalaAct){
+					if(escalaAct!=escalaAnt){
+						if(distanciaAnt+1==distanciaAct|distanciaAnt-1==distanciaAct){
+							//transform.localScale=Vector3.Lerp(transform.localScale,new Vector3(escalaAnt,escalaAnt,escalaAnt),Time.time);
+						}else{
+							transform.localScale=Vector3.Lerp(transform.localScale,new Vector3(escalaAct,escalaAct,escalaAct),Time.time);
+						}
+					}
+					/*
+					 if(escalaAnt !=escalaAct){
 						if(!(distanciaAnt+1==distanciaAct)&&!(distanciaAnt-1==distanciaAct)){
 							transform.localScale=Vector3.Lerp(transform.localScale,new Vector3(escalaAct,escalaAct,escalaAct),10*Time.time);
 						}
-						/*
-						if(!((distanciaAnt+1)==distanciaAct)|!((distanciaAnt-1)==distanciaAct)){
-							transform.localScale=Vector3.Lerp(transform.localScale,new Vector3(escalaAct,escalaAct,escalaAct),10*Time.time);
-						}
-						*/
 					}
+					*/
 					//Debug.Log(distanciaAct+" --- "+distanciaAnt);
 					distanciaAnt=distanciaAct;
 					escalaAnt=escalaAct;
