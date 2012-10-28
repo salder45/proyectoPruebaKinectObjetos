@@ -77,7 +77,7 @@ public class CubeController : MonoBehaviour {
 					int distanciaAct=(int)(distanciaEntreDosPuntos(posHandDr.Position,posHandIz.Position)/100);
 					int escalaAct=(int)(distanciaAct/ESCALA_DISTANCIA);
 					Debug.Log(distanciaAct+" +++ "+distanciaAnt);
-					Debug.Log((distanciaAnt+1==distanciaAct)&&!(distanciaAnt-1==distanciaAct));
+					Debug.Log((distanciaAnt+1==distanciaAct|distanciaAnt-1==distanciaAct));
 					if(escalaAct!=escalaAnt){
 						if(distanciaAnt+1==distanciaAct|distanciaAnt-1==distanciaAct){
 							//transform.localScale=Vector3.Lerp(transform.localScale,new Vector3(escalaAnt,escalaAnt,escalaAnt),Time.time);
