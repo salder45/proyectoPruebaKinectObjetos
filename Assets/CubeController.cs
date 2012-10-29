@@ -29,8 +29,7 @@ public class CubeController : MonoBehaviour {
 	public float valorRotation=0.75f;
 	private const float TAMANO_SECTOR=100;
 	private const int ESCALA_DISTANCIA=2;
-	private float escalaNoNormalizadaAnterior=0f;
-		/*
+	/*
 	private int distanciaAnt=0;
 	private int escalaAnt=0;
 	*/
@@ -78,13 +77,12 @@ public class CubeController : MonoBehaviour {
 					float noNormalActual=(dist*1f)/ESCALA_DISTANCIA;
 					int disNormal=(int)dist;
 					float esc=(disNormal*1f)/ESCALA_DISTANCIA;
-					Debug.Log("Normal "+esc);
-					Debug.Log(noNormalActual);
-					if(!(escalaNoNormalizadaAnterior-noNormalActual>0.1f)|!(noNormalActual-escalaNoNormalizadaAnterior>0.1f)){
+					Debug.Log("Normal "+esc+ " NO Normal "+noNormalActual);
+					Debug.Log(Mathf.Abs(noNormalActual-esc));
+					if(Mathf.Abs(noNormalActual-esc)<0.4f&&Mathf.Abs(noNormalActual-esc)>0.1f){
 						transform.localScale=Vector3.Lerp(transform.localScale,new Vector3(esc,esc,esc),Time.time);
 					}					
 					
-					escalaNoNormalizadaAnterior=noNormalActual;
 					
 					/*
 					 * //Rotacion horizontal
