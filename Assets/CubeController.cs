@@ -29,10 +29,15 @@ public class CubeController : MonoBehaviour {
 	public float valorRotation=0.75f;
 	private const float TAMANO_SECTOR=100;
 	private const int ESCALA_DISTANCIA=2;
+	
+	
 	//
+	int distanciaAnt=0;
+	float escalaAnt=0f;
+	/*
 	private int distanciaAnt=0;
 	private int escalaAnt=0;
-	
+	*/
 	
 	void Start () {
 		Debug.Log("START APP");
@@ -74,6 +79,20 @@ public class CubeController : MonoBehaviour {
 				
 				if(isDentroCuadroSeguridad(posHandDr.Position)&isDentroCuadroSeguridad(posHandIz.Position)){
 					
+					float distancia=(int)distanciaEntreDosPuntos(posHandDr.Position,posHandIz.Position);
+					int distanciaRedondeada=(int)distancia/100;
+					Debug.Log(distancia);
+					float escala=(distanciaRedondeada*1f)/ESCALA_DISTANCIA;
+					Debug.Log("++++ "+escala);
+					if(escalaAnt!=escala){
+						if(!(distanciaAnt+0.5f==distanciaRedondeada)&&!(distanciaAnt-0.5f==distanciaRedondeada)){
+						transform.localScale=Vector3.Lerp(transform.localScale,new Vector3(escala,escala,escala),Time.timeScale);
+						}
+					}
+					distanciaAnt=distanciaRedondeada;
+					escalaAnt=escala;
+					/*
+					
 					int distanciaAct=(int)(distanciaEntreDosPuntos(posHandDr.Position,posHandIz.Position)/100);
 					int escalaAct=(int)(distanciaAct/ESCALA_DISTANCIA);
 					Debug.Log(distanciaAct+" +++ "+distanciaAnt);
@@ -91,10 +110,13 @@ public class CubeController : MonoBehaviour {
 							transform.localScale=Vector3.Lerp(transform.localScale,new Vector3(escalaAct,escalaAct,escalaAct),10*Time.time);
 						}
 					}
-					*/
-					//Debug.Log(distanciaAct+" --- "+distanciaAnt);
+					
 					distanciaAnt=distanciaAct;
 					escalaAnt=escalaAct;
+					*/
+					
+					
+					
 					/*
 					float distanciaAct=(distanciaEntreDosPuntos(posHandDr.Position,posHandIz.Position)/100);
 					Debug.Log((int)distanciaAct);
@@ -108,7 +130,9 @@ public class CubeController : MonoBehaviour {
 					
 					//transform.localScale=Vector3.Slerp(transform.localScale,new Vector3((float)escalaInt,(float)escalaInt,(float)escalaInt),Time.time);
 					*/
+					
 					/*
+					 * //Rotacion horizontal
 					float x,y,z;
 					x=y=z=0;									
 					if((posHandDr.Position.Z<posHandIz.Position.Z&isDentroMargenY(posHandDr.Position.Y,posHandIz.Position.Y))&(!isDentroMargenZ(posHandDr.Position.Z,posHandIz.Position.Z))){
@@ -116,7 +140,7 @@ public class CubeController : MonoBehaviour {
 					}else if((posHandDr.Position.Z>posHandIz.Position.Z&isDentroMargenY(posHandDr.Position.Y,posHandIz.Position.Y))&(!isDentroMargenZ(posHandDr.Position.Z,posHandIz.Position.Z))){
 						y=valorRotation;
 					}
-					
+					//rotacion vertical
 					if((posHandDr.Position.Y<posHandIz.Position.Y&isDentroMargenZ(posHandDr.Position.Z,posHandIz.Position.Z))&(!isDentroMargenY(posHandDr.Position.Y,posHandIz.Position.Y))){
 						x=-valorRotation;
 					}else if((posHandDr.Position.Y>posHandIz.Position.Y&isDentroMargenZ(posHandDr.Position.Z,posHandIz.Position.Z))&(!isDentroMargenY(posHandDr.Position.Y,posHandIz.Position.Y))){
