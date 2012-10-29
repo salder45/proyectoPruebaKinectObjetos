@@ -29,7 +29,7 @@ public class CubeController : MonoBehaviour {
 	public float valorRotation=0.75f;
 	private const float TAMANO_SECTOR=100;
 	private const int ESCALA_DISTANCIA=2;
-	
+	private float escalaNoNormalizadaAnterior=0f;
 		/*
 	private int distanciaAnt=0;
 	private int escalaAnt=0;
@@ -74,8 +74,17 @@ public class CubeController : MonoBehaviour {
 				SkeletonJointPosition posHandDr=skeletonCapability.GetSkeletonJointPosition(user,SkeletonJoint.LeftHand);
 				
 				if(isDentroCuadroSeguridad(posHandDr.Position)&isDentroCuadroSeguridad(posHandIz.Position)){
-								
-				
+					float dist=distanciaEntreDosPuntos(posHandDr.Position,posHandIz.Position)/100f;				
+					float noNormalActual=(dist*1f)/ESCALA_DISTANCIA;
+					int disNormal=(int)dist;
+					float esc=(disNormal*1f)/ESCALA_DISTANCIA;
+					Debug.Log("Normal "+esc);
+					Debug.Log(noNormalActual);
+					if(!(escalaNoNormalizadaAnterior-noNormalActual>0.1f)|!(noNormalActual-escalaNoNormalizadaAnterior>0.1f)){
+						transform.localScale=Vector3.Lerp(transform.localScale,new Vector3(esc,esc,esc),Time.time);
+					}					
+					
+					escalaNoNormalizadaAnterior=noNormalActual;
 					
 					/*
 					 * //Rotacion horizontal
